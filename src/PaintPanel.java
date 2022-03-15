@@ -17,7 +17,10 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
     private Color shapeColor = null;
     private DrawType drawType = DrawType.Nothing;
     private Shape inProgress = null;
-    private ArrayList<Shape> shapeArray = null;
+//    private ArrayList<Shape> shapeHistory = null;
+    private Stack<Shape> shapeHistory = null;
+    private Stack<Integer> brushHistory = null;
+    private int brushCount = 0;
 
     public PaintPanel() {
         super();
@@ -26,7 +29,9 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         this.addMouseMotionListener(this);
         shape = "";
         shapeColor = Color.BLACK;
-        shapeArray = new ArrayList<Shape>();
+//        shapeHistory = new ArrayList<Shape>();
+        shapeHistory = new Stack<Shape>();
+        brushHistory = new Stack<Integer>();
     }
 
     public void setShape(String s) {
@@ -75,12 +80,25 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void addShape(Shape s) {
-        shapeArray.add(s);
+        shapeHistory.push(s);
         repaint();
     }
 
     public void clear() {
-        shapeArray.removeAll(shapeArray);
+        shapeHistory.removeAll(shapeHistory);
+    }
+
+    public void undo() {
+        if (shapeHistory.size() > 0) {
+            if (shapeHistory.peek().getClass().getName().equals("Brush")) {
+                int strokeNumber = brushHistory.pop();
+                for (int i = 0; i <= strokeNumber; i++) {
+                    shapeHistory.pop();
+                }
+            } else {
+                shapeHistory.pop();
+            }
+        }
     }
 
     @Override
@@ -88,8 +106,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         super.paint(g);
         g.setColor(shapeColor);
 
-        for(int i = 0; i < shapeArray.size(); i++) {
-            Shape s = shapeArray.get(i);
+        for(int i = 0; i < shapeHistory.size(); i++) {
+            Shape s = shapeHistory.get(i);
             s.draw(g);
         }
 
@@ -106,6 +124,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
                 inProgress.subsequentPoint(xEnd, yEnd);
                 addShape(inProgress);
                 inProgress = new Brush(xEnd, yEnd, shapeColor);
+                brushCount++;
 
             } else {
                 inProgress.subsequentPoint(xEnd, yEnd);
@@ -156,8 +175,13 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         if (inProgress != null) {
             inProgress.subsequentPoint(xEnd, yEnd);
             addShape(inProgress);
+            if (drawType == DrawType.Brush) {
+                brushHistory.push(brushCount);
+                brushCount = 0;
+            }
             inProgress = null;
         }
+
     }
 
     @Override

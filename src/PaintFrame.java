@@ -42,7 +42,7 @@ public class PaintFrame extends JFrame {
         shapeSolidRR.addActionListener(shapeMenuListener);
         shapeOval.addActionListener(shapeMenuListener);
         shapeSolidOval.addActionListener(shapeMenuListener);
-        
+
         // Adding each menu item to the menu
         shapeMenu.add(shapeBrush);
         shapeMenu.add(shapeLine);
@@ -52,7 +52,6 @@ public class PaintFrame extends JFrame {
         shapeMenu.add(shapeSolidRR);
         shapeMenu.add(shapeOval);
         shapeMenu.add(shapeSolidOval);
-
 
         // Creating the Color Menu
         ForegroundColorListener fcl = new ForegroundColorListener();
@@ -131,6 +130,10 @@ public class PaintFrame extends JFrame {
         sizeMenu.add(sizeSeventyTwo);
         fontMenu.setToolTipText("If you change the font size, style, or text, you may have to resize the window to fix alignment.");
 
+        // Undo button
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(fcl);
+
         // Clear canvas button for the menu bar
         JMenuItem clearCanvas = new JMenuItem("Clear");
         clearCanvas.addActionListener(fcl);
@@ -140,6 +143,7 @@ public class PaintFrame extends JFrame {
         menuBar.add(shapeMenu);
         menuBar.add(colorMenu);
         menuBar.add(fontMenu);
+        menuBar.add(undo);
         menuBar.add(clearCanvas);
         this.setJMenuBar(menuBar);
 
@@ -206,6 +210,8 @@ public class PaintFrame extends JFrame {
                     break;
                 case "Clear":
                     drawingPanel.clear();
+                case "Undo":
+                    drawingPanel.undo();
                 default:
                     drawingPanel.setForeground(null);
                     break;
