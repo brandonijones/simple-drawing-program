@@ -4,7 +4,7 @@ import java.util.*;
 
 import javax.swing.*;
 
-enum DrawType {Line, Rectangle, Oval, RoundRectangle, FilledRoundRectangle, FilledRectangle, FilledOval, Brush, Nothing};
+enum DrawType {Line, Rectangle, Oval, RoundRectangle, SolidRoundRectangle, SolidRectangle, SolidOval, Brush, Nothing};
 
 public class PaintPanel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -33,29 +33,29 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         shape = s;
         switch(shape)
         {
+            case "Brush":
+                drawType = DrawType.Brush;
+                break;
             case "Straight Line":
                 drawType = DrawType.Line;
                 break;
             case "Rectangle":
                 drawType = DrawType.Rectangle;
                 break;
-            case "Oval":
-                drawType = DrawType.Oval;
+            case "Solid Rectangle":
+                drawType = DrawType.SolidRectangle;
                 break;
             case "Round Rectangle":
                 drawType = DrawType.RoundRectangle;
                 break;
-            case "Filled Round Rectangle":
-                drawType = DrawType.FilledRoundRectangle;
+            case "Solid Round Rectangle":
+                drawType = DrawType.SolidRoundRectangle;
                 break;
-            case "Filled Rectangle":
-                drawType = DrawType.FilledRectangle;
+            case "Oval":
+                drawType = DrawType.Oval;
                 break;
-            case "Filled Oval":
-                drawType = DrawType.FilledOval;
-                break;
-            case "Brush":
-                drawType = DrawType.Brush;
+            case "Solid Oval":
+                drawType = DrawType.SolidOval;
                 break;
             default:
                 break;
@@ -120,29 +120,29 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         yStart = e.getY();
         switch(drawType)
         {
+            case Brush:
+                inProgress = new Brush(xStart, yStart, shapeColor);
+                break;
             case Line:
                 inProgress = new StraightLine(xStart, yStart, shapeColor);
                 break;
             case Rectangle:
                 inProgress = new Rectangle(xStart, yStart, shapeColor);
                 break;
-            case Oval:
-                inProgress = new Oval(xStart, yStart, shapeColor);
+            case SolidRectangle:
+                inProgress = new SolidRectangle(xStart, yStart, shapeColor);
                 break;
             case RoundRectangle:
                 inProgress = new RoundRectangle(xStart, yStart, shapeColor);
                 break;
-            case FilledRoundRectangle:
-                inProgress = new FilledRoundRectangle(xStart, yStart, shapeColor);
+            case SolidRoundRectangle:
+                inProgress = new SolidRoundRectangle(xStart, yStart, shapeColor);
                 break;
-            case FilledRectangle:
-                inProgress = new FilledRectangle(xStart, yStart, shapeColor);
+            case Oval:
+                inProgress = new Oval(xStart, yStart, shapeColor);
                 break;
-            case FilledOval:
-                inProgress = new FilledOval(xStart, yStart, shapeColor);
-                break;
-            case Brush:
-                inProgress = new Brush(xStart, yStart, shapeColor);
+            case SolidOval:
+                inProgress = new SolidOval(xStart, yStart, shapeColor);
                 break;
             default:
                 break;

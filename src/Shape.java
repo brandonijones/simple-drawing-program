@@ -125,10 +125,10 @@ class RoundRectangle extends Shape {
     }
 }
 
-class FilledRoundRectangle extends Shape {
+class SolidRoundRectangle extends Shape {
     private int xEnd, yEnd;
 
-    public FilledRoundRectangle(int x, int y, Color c) {
+    public SolidRoundRectangle(int x, int y, Color c) {
         super(x,y,c);
         xEnd = x;
         yEnd = y;
@@ -152,10 +152,10 @@ class FilledRoundRectangle extends Shape {
     }
 }
 
-class FilledRectangle extends Shape {
+class SolidRectangle extends Shape {
     private int xEnd, yEnd;
 
-    public FilledRectangle(int x, int y, Color c) {
+    public SolidRectangle(int x, int y, Color c) {
         super(x,y,c);
         xEnd = x;
         yEnd = y;
@@ -178,10 +178,10 @@ class FilledRectangle extends Shape {
     }
 }
 
-class FilledOval extends Shape {
+class SolidOval extends Shape {
     private int xEnd, yEnd;
 
-    public FilledOval(int x, int y, Color c) {
+    public SolidOval(int x, int y, Color c) {
         super(x,y,c);
         xEnd = x;
         yEnd = y;

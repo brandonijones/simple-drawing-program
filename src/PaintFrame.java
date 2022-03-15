@@ -24,34 +24,35 @@ public class PaintFrame extends JFrame {
         // Creating Figure Menu
         ShapeMenuListener shapeMenuListener = new ShapeMenuListener();
         JMenu shapeMenu = new JMenu("Shape");
+        JMenuItem shapeBrush = new JMenuItem("Brush");
         JMenuItem shapeLine = new JMenuItem("Straight Line");
         JMenuItem shapeRectangle = new JMenuItem("Rectangle");
-        JMenuItem shapeOval = new JMenuItem("Oval");
+        JMenuItem shapeSolidRect = new JMenuItem("Solid Rectangle");
         JMenuItem shapeRoundRect = new JMenuItem("Round Rectangle");
-        JMenuItem shapeFilledRR = new JMenuItem("Filled Round Rectangle");
-        JMenuItem shapeFilledRect = new JMenuItem("Filled Rectangle");
-        JMenuItem shapeFilledOval = new JMenuItem("Filled Oval");
-        JMenuItem shapeBrush = new JMenuItem("Brush");
+        JMenuItem shapeSolidRR = new JMenuItem("Solid Round Rectangle");
+        JMenuItem shapeOval = new JMenuItem("Oval");
+        JMenuItem shapeSolidOval = new JMenuItem("Solid Oval");
 
         // Adding Action Listener to each menu item
+        shapeBrush.addActionListener(shapeMenuListener);
         shapeLine.addActionListener(shapeMenuListener);
         shapeRectangle.addActionListener(shapeMenuListener);
-        shapeOval.addActionListener(shapeMenuListener);
+        shapeSolidRect.addActionListener(shapeMenuListener);
         shapeRoundRect.addActionListener(shapeMenuListener);
-        shapeFilledRR.addActionListener(shapeMenuListener);
-        shapeFilledRect.addActionListener(shapeMenuListener);
-        shapeFilledOval.addActionListener(shapeMenuListener);
-        shapeBrush.addActionListener(shapeMenuListener);
-
+        shapeSolidRR.addActionListener(shapeMenuListener);
+        shapeOval.addActionListener(shapeMenuListener);
+        shapeSolidOval.addActionListener(shapeMenuListener);
+        
         // Adding each menu item to the menu
+        shapeMenu.add(shapeBrush);
         shapeMenu.add(shapeLine);
         shapeMenu.add(shapeRectangle);
-        shapeMenu.add(shapeOval);
+        shapeMenu.add(shapeSolidRect);
         shapeMenu.add(shapeRoundRect);
-        shapeMenu.add(shapeFilledRR);
-        shapeMenu.add(shapeFilledRect);
-        shapeMenu.add(shapeFilledOval);
-        shapeMenu.add(shapeBrush);
+        shapeMenu.add(shapeSolidRR);
+        shapeMenu.add(shapeOval);
+        shapeMenu.add(shapeSolidOval);
+
 
         // Creating the Color Menu
         ForegroundColorListener fcl = new ForegroundColorListener();
@@ -90,14 +91,10 @@ public class PaintFrame extends JFrame {
             backgroundOption.addActionListener(bcl);
         }
 
-        JMenuItem colorClear = new JMenuItem("Clear");
-        colorClear.addActionListener(fcl);
-
+        // Adding foreground and background menus to color menu
         colorMenu.add(foregroundMenu);
         colorMenu.addSeparator();
         colorMenu.add(backgroundMenu);
-        colorMenu.addSeparator();
-        colorMenu.add(colorClear);
 
         // Creating the Font Menu
         FontMenuListener fml = new FontMenuListener();
@@ -134,11 +131,16 @@ public class PaintFrame extends JFrame {
         sizeMenu.add(sizeSeventyTwo);
         fontMenu.setToolTipText("If you change the font size, style, or text, you may have to resize the window to fix alignment.");
 
+        // Clear canvas button for the menu bar
+        JMenuItem clearCanvas = new JMenuItem("Clear");
+        clearCanvas.addActionListener(fcl);
+
         // Creating Menu Bar and Adding Components
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(shapeMenu);
         menuBar.add(colorMenu);
         menuBar.add(fontMenu);
+        menuBar.add(clearCanvas);
         this.setJMenuBar(menuBar);
 
         // Creating and Adding Paint Panel
