@@ -1,5 +1,3 @@
-package com.brandonijones;
-
 import java.awt.*;
 
 public abstract class Shape {

@@ -1,5 +1,3 @@
-package com.brandonijones;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -35,28 +33,28 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         shape = s;
         switch(shape)
         {
-            case "line":
+            case "Straight Line":
                 drawType = DrawType.Line;
                 break;
-            case "rectangle":
+            case "Rectangle":
                 drawType = DrawType.Rectangle;
                 break;
-            case "oval":
+            case "Oval":
                 drawType = DrawType.Oval;
                 break;
-            case "roundR":
+            case "Round Rectangle":
                 drawType = DrawType.RoundRectangle;
                 break;
-            case "filledRR":
+            case "Filled Round Rectangle":
                 drawType = DrawType.FilledRoundRectangle;
                 break;
-            case "filledR":
+            case "Filled Rectangle":
                 drawType = DrawType.FilledRectangle;
                 break;
-            case "filledO":
+            case "Filled Oval":
                 drawType = DrawType.FilledOval;
                 break;
-            case "brush":
+            case "Brush":
                 drawType = DrawType.Brush;
                 break;
             default:

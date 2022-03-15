@@ -1,5 +1,3 @@
-package com.brandonijones;
-
 public class Main {
 
     public static void main(String[] args) {
