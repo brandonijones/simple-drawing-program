@@ -9,11 +9,19 @@ public class PaintFrame extends JFrame {
 
     private PaintPanel drawingPanel = null;
 
+    private JMenu currentColor = null;
+
     private int fontStyle = Font.PLAIN;
     private int fontSize = 10;
     private Font font = null;
 
     private JTextField textField = null;
+
+    private String[] shapeOptions = {"Brush", "Straight Line", "Rectangle", "Solid Rectangle",
+            "Round Rectangle", "Solid Round Rectangle", "Oval", "Solid Oval"};
+    private String[] colorOptions = {"Black", "White", "Blue", "Cyan", "Green", "Magenta", "Red"};
+    private String[] styleOptions = {"Plain", "Bold", "Italics"};
+    private String[] sizeOptions = {"SIZE 10", "SIZE 20", "SIZE 72"};
 
     public PaintFrame() {
         super("Brandon's Simple Paint Program");
@@ -24,71 +32,25 @@ public class PaintFrame extends JFrame {
         // Creating Figure Menu
         ShapeMenuListener shapeMenuListener = new ShapeMenuListener();
         JMenu shapeMenu = new JMenu("Shape");
-        JMenuItem shapeBrush = new JMenuItem("Brush");
-        JMenuItem shapeLine = new JMenuItem("Straight Line");
-        JMenuItem shapeRectangle = new JMenuItem("Rectangle");
-        JMenuItem shapeSolidRect = new JMenuItem("Solid Rectangle");
-        JMenuItem shapeRoundRect = new JMenuItem("Round Rectangle");
-        JMenuItem shapeSolidRR = new JMenuItem("Solid Round Rectangle");
-        JMenuItem shapeOval = new JMenuItem("Oval");
-        JMenuItem shapeSolidOval = new JMenuItem("Solid Oval");
-
-        // Adding Action Listener to each menu item
-        shapeBrush.addActionListener(shapeMenuListener);
-        shapeLine.addActionListener(shapeMenuListener);
-        shapeRectangle.addActionListener(shapeMenuListener);
-        shapeSolidRect.addActionListener(shapeMenuListener);
-        shapeRoundRect.addActionListener(shapeMenuListener);
-        shapeSolidRR.addActionListener(shapeMenuListener);
-        shapeOval.addActionListener(shapeMenuListener);
-        shapeSolidOval.addActionListener(shapeMenuListener);
-
-        // Adding each menu item to the menu
-        shapeMenu.add(shapeBrush);
-        shapeMenu.add(shapeLine);
-        shapeMenu.add(shapeRectangle);
-        shapeMenu.add(shapeSolidRect);
-        shapeMenu.add(shapeRoundRect);
-        shapeMenu.add(shapeSolidRR);
-        shapeMenu.add(shapeOval);
-        shapeMenu.add(shapeSolidOval);
+        JMenuItem[] shapes = new JMenuItem[shapeOptions.length];
+        addActionListenersAndMenuItems(shapeMenu, shapes, shapeMenuListener, shapeOptions);
 
         // Creating the Color Menu
-        ForegroundColorListener fcl = new ForegroundColorListener();
         JMenu colorMenu = new JMenu("Color");
+        currentColor = new JMenu("\u25A0");
+        currentColor.setBackground(Color.BLACK);
 
         // Foreground color menu
+        ForegroundColorListener fcl = new ForegroundColorListener();
         JMenu foregroundMenu = new JMenu("Foreground");
-        JMenuItem[] foregroundOptions = {new JMenuItem("Black"),
-                new JMenuItem("White"),
-                new JMenuItem("Blue"),
-                new JMenuItem("Cyan"),
-                new JMenuItem("Green"),
-                new JMenuItem("Magenta"),
-                new JMenuItem("Red")};
-
-        // Adding Action listener to each menu item
-        for (JMenuItem foregroundOption : foregroundOptions) {
-            foregroundMenu.add(foregroundOption);
-            foregroundOption.addActionListener(fcl);
-        }
+        JMenuItem[] foregroundOptions = new JMenuItem[colorOptions.length];
+        addActionListenersAndMenuItems(foregroundMenu, foregroundOptions, fcl,colorOptions);
 
         // Background color menu
         BackgroundColorListener bcl = new BackgroundColorListener();
         JMenu backgroundMenu = new JMenu("Background");
-        JMenuItem[] backgroundOptions = {new JMenuItem("Black"),
-                new JMenuItem("White"),
-                new JMenuItem("Blue"),
-                new JMenuItem("Cyan"),
-                new JMenuItem("Green"),
-                new JMenuItem("Magenta"),
-                new JMenuItem("Red")};
-
-        // Adding Action listener to each menu item
-        for (JMenuItem backgroundOption : backgroundOptions) {
-            backgroundMenu.add(backgroundOption);
-            backgroundOption.addActionListener(bcl);
-        }
+        JMenuItem[] backgroundOptions = new JMenuItem[colorOptions.length];
+        addActionListenersAndMenuItems(backgroundMenu, backgroundOptions, bcl, colorOptions);
 
         // Adding foreground and background menus to color menu
         colorMenu.add(foregroundMenu);
@@ -101,33 +63,17 @@ public class PaintFrame extends JFrame {
 
         // Font Style menu
         JMenu styleMenu = new JMenu("Style");
-        JMenuItem stylePlain = new JMenuItem("Plain");
-        JMenuItem styleBold = new JMenuItem("Bold");
-        JMenuItem styleItalics = new JMenuItem("Italics");
+        JMenuItem[] styles = new JMenuItem[styleOptions.length];
+        addActionListenersAndMenuItems(styleMenu, styles, fml, styleOptions);
 
         // Font Size menu
         JMenu sizeMenu = new JMenu("Size");
-        JMenuItem sizeTen = new JMenuItem("SIZE 10");
-        JMenuItem sizeTwenty = new JMenuItem("SIZE 20");
-        JMenuItem sizeSeventyTwo = new JMenuItem("SIZE 72");
-
-        // Adding action listeners for font style and font size menus
-        stylePlain.addActionListener(fml);
-        styleBold.addActionListener(fml);
-        styleItalics.addActionListener(fml);
-        sizeTen.addActionListener(fml);
-        sizeTwenty.addActionListener(fml);
-        sizeSeventyTwo.addActionListener(fml);
+        JMenuItem[] sizes = new JMenuItem[sizeOptions.length];
+        addActionListenersAndMenuItems(sizeMenu, sizes, fml, sizeOptions);
 
         // Adding Style menu and Size menu to the Font Menu
         fontMenu.add(styleMenu);
-        styleMenu.add(stylePlain);
-        styleMenu.add(styleBold);
-        styleMenu.add(styleItalics);
         fontMenu.add(sizeMenu);
-        sizeMenu.add(sizeTen);
-        sizeMenu.add(sizeTwenty);
-        sizeMenu.add(sizeSeventyTwo);
         fontMenu.setToolTipText("If you change the font size, style, or text, you may have to resize the window to fix alignment.");
 
         // Undo button
@@ -135,13 +81,14 @@ public class PaintFrame extends JFrame {
         undo.addActionListener(fcl);
 
         // Clear canvas button for the menu bar
-        JMenuItem clearCanvas = new JMenuItem("Clear");
+        JMenuItem clearCanvas = new JMenuItem("Clear Canvas");
         clearCanvas.addActionListener(fcl);
 
         // Creating Menu Bar and Adding Components
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(shapeMenu);
         menuBar.add(colorMenu);
+        menuBar.add(currentColor);
         menuBar.add(fontMenu);
         menuBar.add(undo);
         menuBar.add(clearCanvas);
@@ -169,6 +116,14 @@ public class PaintFrame extends JFrame {
         textField.setToolTipText("If you change the font size, style, or text, you may have to resize the window to fix alignment.");
         textPanel.add(textField);
         this.add(textPanel, BorderLayout.SOUTH);
+    }
+
+    public void addActionListenersAndMenuItems(JMenu menu, JMenuItem[] menuItems, ActionListener listener, String[] options) {
+        for (int i = 0; i < menuItems.length; i++) {
+            menuItems[i] = new JMenuItem(options[i]);   // initializes menu item
+            menuItems[i].addActionListener(listener);   // adds action listener to menu item
+            menu.add(menuItems[i]);                     // adds menu item to menu
+        }
     }
 
     private class ShapeMenuListener implements ActionListener {
@@ -208,7 +163,7 @@ public class PaintFrame extends JFrame {
                 case "Red":
                     drawingPanel.setShapeColor(Color.RED);
                     break;
-                case "Clear":
+                case "Clear Canvas":
                     drawingPanel.clear();
                 case "Undo":
                     drawingPanel.undo();
@@ -216,6 +171,7 @@ public class PaintFrame extends JFrame {
                     drawingPanel.setForeground(null);
                     break;
             }
+            currentColor.setForeground(drawingPanel.getShapeColor());   // displays currently selected color
         }
     }
 

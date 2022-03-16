@@ -17,7 +17,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
     private Color shapeColor = null;
     private DrawType drawType = DrawType.Nothing;
     private Shape inProgress = null;
-//    private ArrayList<Shape> shapeHistory = null;
     private Stack<Shape> shapeHistory = null;
     private Stack<Integer> brushHistory = null;
     private int brushCount = 0;
@@ -29,9 +28,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         this.addMouseMotionListener(this);
         shape = "";
         shapeColor = Color.BLACK;
-//        shapeHistory = new ArrayList<Shape>();
-        shapeHistory = new Stack<Shape>();
-        brushHistory = new Stack<Integer>();
+        shapeHistory = new Stack<>();
+        brushHistory = new Stack<>();
     }
 
     public void setShape(String s) {
@@ -85,12 +83,15 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     public void clear() {
-        shapeHistory.removeAll(shapeHistory);
+        shapeHistory.removeAllElements();
     }
 
     public void undo() {
         if (shapeHistory.size() > 0) {
-            if (shapeHistory.peek().getClass().getName().equals("Brush")) {
+            String shapeType = shapeHistory.peek().getClass().getName();
+
+            // Multiple pops need to be performed if the previous shape was a brush
+            if (shapeType.equals("Brush")) {
                 int strokeNumber = brushHistory.pop();
                 for (int i = 0; i <= strokeNumber; i++) {
                     shapeHistory.pop();
@@ -106,8 +107,8 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         super.paint(g);
         g.setColor(shapeColor);
 
-        for(int i = 0; i < shapeHistory.size(); i++) {
-            Shape s = shapeHistory.get(i);
+        // Entire canvas gets "repainted"
+        for (Shape s : shapeHistory) {
             s.draw(g);
         }
 
@@ -124,8 +125,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
                 inProgress.subsequentPoint(xEnd, yEnd);
                 addShape(inProgress);
                 inProgress = new Brush(xEnd, yEnd, shapeColor);
-                brushCount++;
-
+                brushCount++;   // increment number of ovals in current brush stroke
             } else {
                 inProgress.subsequentPoint(xEnd, yEnd);
                 repaint();
@@ -175,13 +175,14 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         if (inProgress != null) {
             inProgress.subsequentPoint(xEnd, yEnd);
             addShape(inProgress);
+
+            // Adds count of ovals in brush stroke to brush history
             if (drawType == DrawType.Brush) {
                 brushHistory.push(brushCount);
-                brushCount = 0;
+                brushCount = 0; // reset global brush count
             }
             inProgress = null;
         }
-
     }
 
     @Override
